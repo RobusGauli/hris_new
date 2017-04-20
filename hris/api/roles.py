@@ -2,7 +2,7 @@
 from hris.utils import hash_password, gen_access_token, decode_access_token, random_string
 from flask import request, abort, jsonify, g
 from functools import wraps
-
+import copy
 from hris.utils import (
     handle_keys_for_post_request,
     handle_keys_for_update_request
@@ -51,17 +51,20 @@ def update_query(table_name,mapping, id):
 
 
 @api.route('/roles', methods = ['POST'])
-@handle_keys_for_post_request(Role, _exclude=('id', 'updated_at', 'updated_by', 'created_at', 'created_by'))
+@handle_keys_for_post_request(Role, _exclude=('id', 'updated_at', 'updated_by', 'created_at', 'created_by', 'del_flag', 'permission_eight', 'permission_nine', 'permission_ten', 'role_type_display_name'))
 @create_update_permission('user_management_perm')
 def create_roles():
     '''This method will create a role and assign diffenet permissions'''
     try:
-         role = Role(**request.json)
+         json_request = dict(copy.deepcopy(request.json))
+         json_request['role_type_display_name'] = request.json.get('role_type')
+         role = Role(**json_request)
          db_session.add(role)
          db_session.commit()
     except IntegrityError as e:
         return record_exists_envelop()
     except Exception as e:
+        raise
         return fatal_error_envelop()
     else:
         return record_created_envelop(request.json)

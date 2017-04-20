@@ -61,29 +61,7 @@ def can_edit_permit(func):
 
 
 
-def only_admin(func):
-    @wraps(func)
-    def admin_wrapper(*args, **kwargs):
-        print(request.headers)
-        if  'Token' not in request.headers.keys():
-            return unauthorized_envelop()
-        try:
-            print(request.headers)
-            decoded = decode_access_token(request.headers['Token'])
-            if decoded is None:
-                return unauthorized_envelop()
-            
-        except Exception:
-            return unauthorized_envelop()
-        else:
-            role_id = decoded['role_id']
-            
-            #for admin role,'permission one' must be true
-            if not ROLES_PERMISSION[role_id]['permission_one'] == True:
-                return unauthorized_envelop()
-            return func(*args, **kwargs)
-    return admin_wrapper
-            
+
 
 
 
@@ -240,7 +218,7 @@ def read_permission(key):
                 user_name = decoded['user_name']
 
                 role = ROLES_PERMISSION[role_id][key]
-                if not role == 'N':
+                if  role != 'N':
                     return func(*args, **kwargs)
                 else:
                     return unauthorized_envelop()

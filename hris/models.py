@@ -97,8 +97,6 @@ class Role(Base):
     #relationship
     users = relationship('User', back_populates='role', cascade = 'all, delete, delete-orphan')
     
-    def __getattr__(self, attr):
-        return self.__dict__[attr] if self.__dict__[attr] else ''
     
     def to_dict(self):
         role = {
@@ -178,7 +176,7 @@ class FacilityType(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), unique=True, nullable=False)
-    display_name = Column(String(200), nullable=False)
+    display_name = Column(String(200), nullable=False, unique=True)
     del_flag = Column(Boolean, default=False)
 
     branches = relationship('Branch', back_populates='facility_type', cascade='all, delete, delete-orphan')
@@ -190,7 +188,7 @@ class LLG(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100), unique=True, nullable=False)
-    display_name = Column(String(200))
+    display_name = Column(String(200), unique=True, nullable=False)
     del_flag = Column(Boolean, default=False)
     branches = relationship('Branch', back_populates='llg', cascade='all, delete, delete-orphan')
 
@@ -201,7 +199,7 @@ class District(Base):
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), unique=True, nullable=False)
-    display_name = Column(String(200))
+    display_name = Column(String(200), unique=True, nullable=False)
     del_flag = Column(Boolean, default=False)
     branches = relationship('Branch', back_populates='district', cascade='all, delete, delete-orphan')
 
@@ -210,7 +208,7 @@ class Province(Base):
     
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), unique=True, nullable=False)
-    display_name = Column(String(200))
+    display_name = Column(String(200), unique=True, nullable=False)
     del_flag = Column(Boolean, default=False)
     branches = relationship('Branch', back_populates='province', cascade='all, delete, delete-orphan')
 
@@ -219,7 +217,7 @@ class Region(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), unique=True, nullable=False)
-    display_name = Column(String(200))
+    display_name = Column(String(200), unique=True, nullable=False)
     del_flag = Column(Boolean, default=False)
 
     branches = relationship('Branch', back_populates='region', cascade='all, delete, delete-orphan')
@@ -234,8 +232,8 @@ class EmployeeCategoryRank(Base):
     __tablename__ = 'emp_cat_ranks'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(11), nullable=False, unique=True)
-    display_name = Column(String(11), nullable=False, unique=True)
+    name = Column(String(100), nullable=False, unique=True)
+    display_name = Column(String(100), nullable=False, unique=True)
     activate = Column(Boolean, default=True)
     del_flag = Column(Boolean, default=False)
 

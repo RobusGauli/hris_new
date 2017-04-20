@@ -114,7 +114,7 @@ def handle_keys_for_post_request(model, *, _exclude=None):
             if result:
                 return keys_require_envelop('Keys required %r' %(' ,'.join(key for key  in result)))
             #check if there are any fields emopty
-            if not all(len(str(val).strip()) >= 2 for val in request.json.values()):
+            if not all(len(str(val).strip()) >= 1 for val in request.json.values()):
                 return length_require_envelop()
             #everythin is okay return the function
             return func(*args, **kwargs)

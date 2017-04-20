@@ -8,7 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from hris import db_session
 
 #auth
-from hris.api.auth import can_edit_permit, only_admin
+
 
 from hris.models import (
     FacilityType,
@@ -38,7 +38,7 @@ def create_facility():
     if not set(request.json.keys()) == {'name'}:
         return jsonify({'message' : 'missing keys'})
     
-    if not len(request.json['name']) > 3:
+    if not len(request.json['name']) > 2:
         return jsonify({'message' : 'not adequate lenght'})
     
     #lower case the facility name
@@ -161,7 +161,7 @@ def get_facilities():
     
     try:
         facilities = db_session.query(FacilityType).order_by(FacilityType.name).all()
-        gen_exp = (dict(name = f.name, id=f.id) for f in facilities)
+        gen_exp = (dict(name = f.display_name, id=f.id) for f in facilities)
         return records_json_envelop(list(gen_exp))
     except Exception as e:
         return fatal_error_envelop()
@@ -171,7 +171,7 @@ def get_llg():
     
     try:
         llgs = db_session.query(LLG).order_by(LLG.name).all()
-        gen_exp = (dict(name = f.name, id=f.id) for f in llgs)
+        gen_exp = (dict(name = f.display_name, id=f.id) for f in llgs)
         return records_json_envelop(list(gen_exp))
     except Exception as e:
         return fatal_error_envelop()
@@ -182,7 +182,7 @@ def get_districts():
     
     try:
         districts = db_session.query(District).order_by(District.name).all()
-        gen_exp = (dict(name = f.name, id=f.id) for f in districts)
+        gen_exp = (dict(name = f.display_name, id=f.id) for f in districts)
         return records_json_envelop(list(gen_exp))
     except Exception as e:
         return fatal_error_envelop()
@@ -192,7 +192,7 @@ def get_provinces():
     
     try:
         provinces = db_session.query(Province).order_by(Province.name).all()
-        gen_exp = (dict(name = f.name, id=f.id) for f in provinces)
+        gen_exp = (dict(name = f.display_name, id=f.id) for f in provinces)
         return records_json_envelop(list(gen_exp))
     except Exception as e:
         return fatal_error_envelop()
@@ -203,7 +203,7 @@ def get_regions():
     
     try:
         provinces = db_session.query(Region).order_by(Region.name).all()
-        gen_exp = (dict(name = f.name, id=f.id) for f in provinces)
+        gen_exp = (dict(name = f.display_name, id=f.id) for f in provinces)
         return records_json_envelop(list(gen_exp))
     except Exception as e:
         return fatal_error_envelop()
@@ -219,7 +219,7 @@ def update_facility(id):
         abort(401)
     
     #now try to update the facilty name
-    name = request.json['name'].lower().strip()
+    name = request.json['name'].replace(' ',  '').lower().strip()
     display_name = request.json['name'].strip()
 
     try:
@@ -248,7 +248,7 @@ def update_llg(id):
         abort(401)
     
     #now try to update the facilty name
-    name = request.json['name'].lower().strip()
+    name = request.json['name'].replace(' ', '').lower().strip()
     display_name = request.json['name'].strip()
 
     try:
@@ -277,7 +277,7 @@ def update_district(id):
         abort(401)
     
     #now try to update the facilty name
-    name = request.json['name'].lower().strip()
+    name = request.json['name'].replace(' ', '').lower().strip()
     display_name = request.json['name'].strip()
 
     try:
@@ -306,7 +306,7 @@ def update_province(id):
         abort(401)
     
     #now try to update the facilty name
-    name = request.json['name'].lower().strip()
+    name = request.json['name'].replace(' ', '').lower().strip()
     display_name = request.json['name'].strip()
 
     try:
@@ -335,7 +335,7 @@ def update_region(id):
         abort(401)
     
     #now try to update the facilty name
-    name = request.json['name'].lower().strip()
+    name = request.json['name'].replace(' ', '').lower().strip()
     display_name = request.json['name'].strip()
 
     try:

@@ -9,7 +9,7 @@ from hris import db_session
 
 import itertools
 #auth
-from hris.api.auth import can_edit_permit, only_admin
+
 ###
 from hris.models import (
     User, 
@@ -41,7 +41,6 @@ from hris.api.response_envelop import (
 
 
 @api.route('/empcategoryranks', methods=['POST'])
-@only_admin
 def create_emp_cat_ranks():
     if not request.json:
         abort(400)
@@ -53,8 +52,8 @@ def create_emp_cat_ranks():
     
 
     #if everything is fine
-    name = request.json['name'].lower().strip()
-    display_name = request.json['name']
+    name = request.json['name'].replace(' ', '').lower().strip()
+    display_name = request.json['name'].strip()
 
     #put to db
     try:
@@ -70,7 +69,6 @@ def create_emp_cat_ranks():
 
 
 @api.route('/empcategoryranks', methods=['GET'])
-@only_admin
 def get_emp_cat_ranks():
 
     try:
@@ -85,7 +83,6 @@ def get_emp_cat_ranks():
         return records_json_envelop(list(ranks))
 
 @api.route('/empcategoryranks/<int:id>', methods=['PUT'])
-@only_admin
 def update_rank(id):
     if not request.json:
         abort(400)
@@ -94,7 +91,7 @@ def update_rank(id):
         abort(401)
     
     #now try to update the facilty name
-    name = request.json['name'].lower().strip()
+    name = request.json['name'].replace(' ', '').lower().strip()
     display_name = request.json['name'].strip()
 
     try:
@@ -108,7 +105,7 @@ def update_rank(id):
     except IntegrityError as e:
         return record_exists_envelop()
     except Exception as e:
-        
+        raise
         abort(500)
 
     else:
@@ -116,7 +113,6 @@ def update_rank(id):
 
 
 @api.route('/empcategoryranks/<int:rank_id>/empcategories', methods=['POST'])
-@only_admin
 def create_emp_cat(rank_id):
     if not request.json:
         abort(400)
@@ -128,7 +124,7 @@ def create_emp_cat(rank_id):
     
     #strip down the values
     display_name = request.json['name'].strip()
-    name = display_name.lower()
+    name = display_name.lower().replace(' ', '')
     emp_cat_rank_id = rank_id
 
     #try to put onto database
@@ -145,12 +141,11 @@ def create_emp_cat(rank_id):
 
 
 @api.route('/empcategories', methods=['GET'])
-@only_admin
 def get_emp_categories():
 
     try:
         ranks = db_session.query(EmployeeCategory).order_by(EmployeeCategory.name).all()
-        rks = (dict(id=rank.id, name=rank.display_name, emp_cat_rank=rank.emp_cat_rank.name, emp_cat_rank_id=rank.emp_cat_rank.id)
+        rks = (dict(id=rank.id, name=rank.display_name, emp_cat_rank=rank.emp_cat_rank.display_name, emp_cat_rank_id=rank.emp_cat_rank.id)
                                                                           for rank in ranks)
     except ResultNotFound as e:
         return record_notfound_envelop()
@@ -161,7 +156,6 @@ def get_emp_categories():
         
 
 @api.route('/empcategories/<int:id>', methods=['PUT'])
-@only_admin
 def update_emp_category(id):
     if not request.json:
         abort(400)
@@ -171,7 +165,7 @@ def update_emp_category(id):
     
     #now try to update the facilty name
     if name is not None:
-        name = request.json['name'].lower().strip()
+        name = request.json['name'].lower().replace(' ', '').strip()
         display_name = request.json['name'].strip()
     
     try:
@@ -196,7 +190,6 @@ def update_emp_category(id):
 
 
 @api.route('/employeetypes', methods=['POST'])
-@only_admin
 def create_employee_type():
 
     if not request.json:
@@ -210,7 +203,7 @@ def create_employee_type():
     
     #clear up the values
     display_name = request.json['name'].strip()
-    name = display_name.lower()
+    name = display_name.lower().replace(' ', '')
 
     try:
         e_type = EmployeeType(name=name, display_name=display_name)
@@ -225,7 +218,6 @@ def create_employee_type():
     
 
 @api.route('/employeetypes', methods=['GET'])
-@only_admin
 def get_employee_types():
 
     try:
@@ -241,7 +233,6 @@ def get_employee_types():
 
 
 @api.route('/employeetypes/<int:id>', methods=['PUT'])
-@only_admin
 def update_emp_type(id):
     if not request.json:
         abort(400)
@@ -251,7 +242,7 @@ def update_emp_type(id):
     
     #now try to update the facilty name
     if name is not None:
-        name = request.json['name'].lower().strip()
+        name = request.json['name'].lower().strip().replace(' ', '')
         display_name = request.json['name'].strip()
     
     try:

@@ -9,7 +9,7 @@ from hris import db_session, ROLES_PERMISSION, engine
 import copy
 
 #auth
-from hris.api.auth import can_edit_permit, only_admin
+
 ###
 #auth
 from hris.utils import (
@@ -18,9 +18,7 @@ from hris.utils import (
 )
 
 from hris.api.auth import (
-    can_edit_permit, 
     allow_permission, 
-    only_admin, 
     create_update_permission,
     read_permission
 )
