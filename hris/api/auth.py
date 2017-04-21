@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from flask import current_app
 from functools import wraps
 from hris.utils import decode_access_token
 
@@ -191,7 +192,7 @@ def create_update_permission(key):
                 role_id = decoded['role_id']
                 user_name = decoded['user_name']
             
-                role = ROLES_PERMISSION[role_id][key]
+                role = current_app.config[role_id][key]
                 if role == 'W' or role =='E':
                     return func(*args, **kwargs)
                 else:
@@ -201,10 +202,12 @@ def create_update_permission(key):
 
     return decorator
 
+
 def read_permission(key):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            
             if 'Token' not in request.headers:
                 return unauthorized_envelop()
             try:
@@ -217,7 +220,7 @@ def read_permission(key):
                 role_id = decoded['role_id']
                 user_name = decoded['user_name']
 
-                role = ROLES_PERMISSION[role_id][key]
+                role = current_app.config[role_id][key]
                 if  role != 'N':
                     return func(*args, **kwargs)
                 else:

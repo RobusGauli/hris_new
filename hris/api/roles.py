@@ -1,6 +1,6 @@
 '''This module is responsbile for creating roles and assigning different permissions to the roles'''
 from hris.utils import hash_password, gen_access_token, decode_access_token, random_string
-from flask import request, abort, jsonify, g
+from flask import request, abort, jsonify, g, current_app
 from functools import wraps
 import copy
 from hris.utils import (
@@ -67,6 +67,10 @@ def create_roles():
         raise
         return fatal_error_envelop()
     else:
+        roles = db_session.query(Role).all()
+        roles = [role.to_dict() for role in roles]
+        for role in roles:
+            current_app.config[role['id']]= role
         return record_created_envelop(request.json)
 
 @api.route('/roles', methods=['GET'])
@@ -100,10 +104,15 @@ def update_role(r_id):
         try:
             con.execute(query)
         except IntegrityError as e:
-            return record_exists_envelop()
+            return record_exists_envelop() 
         except Exception as e:
             return fatal_error_envelop()
         else:
+            roles = db_session.query(Role).all()
+            roles = [role.to_dict() for role in roles]
+            for role in roles:
+                current_app.config[role['id']]= role
+            
             return record_updated_envelop(request.json)
 
 

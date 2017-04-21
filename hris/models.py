@@ -261,8 +261,8 @@ class EmployeeType(Base):
     __tablename__ = 'emp_types'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(30), nullable=False, unique=True)
-    display_name = Column(String(30), nullable=False, unique=True)
+    name = Column(String(100), nullable=False, unique=True)
+    display_name = Column(String(100), nullable=False, unique=True)
     activate = Column(Boolean, default=True)
     #relationship
     employees = relationship('Employee', back_populates='employee_type', cascade='all, delete, delete-orphan')
@@ -293,8 +293,8 @@ class Employee(Base):
     region = Column(String(100))
     country = Column(String(40))
     email_address = Column(String(100), unique=True)
-    contact_number = Column(String(20), unique=True)
-    alt_contact_number = Column(String(20), unique=True)
+    contact_number = Column(String(30), unique=True)
+    alt_contact_number = Column(String(30), unique=True)
     age = Column(Integer, nullable=False)
     retirement_age = Column(Integer, nullable=False, default=50)
 

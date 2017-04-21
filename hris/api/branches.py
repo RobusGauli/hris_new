@@ -244,7 +244,7 @@ def update_division(d_id):
     
     inner = ', '.join('{:s} = {!r}'.format(key, val) for key, val in json_request.items())
     query = '''UPDATE branches SET {:s} where id = {:d}'''.format(inner, d_id)
-    print(query)
+    
     
     with engine.connect() as con:
         try:
@@ -271,11 +271,11 @@ def get_branches():
         branches = db_session.query(Branch).filter(Branch.is_branch==True).filter(Branch.del_flag==False).filter(Branch.acitivate==True).order_by(Branch.facility_name).all()
         all_branches = (dict(id=branch.id,
                              facility_name=branch.facility_display_name,
-                             llg=branch.llg.name,
-                             district=branch.district.name,
-                             province=branch.province.name,
-                             region=branch.region.name,
-                             facility_type=branch.facility_type.name,
+                             llg=branch.llg.display_name,
+                             district=branch.district.display_name,
+                             province=branch.province.display_name,
+                             region=branch.region.display_name,
+                             facility_type=branch.facility_type.display_name,
                              ) for branch in branches)
     except Exception as e:
         return fatal_error_envelop()

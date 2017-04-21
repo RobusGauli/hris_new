@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask 
+from flask import Flask, current_app
 
 
 
@@ -74,6 +74,13 @@ def create_app(config_name=None, main=True):
     app.register_blueprint(api_blueprint, url_prefix='/api')
 
     #initialize flask extension
+    with app.app_context():
+        roles = db_session.query(Role).all()
+        roles = [role.to_dict() for role in roles]
+        for role in roles:
+            current_app.config[role['id']]= role
+            
+        
     
 
     #register the errohandler
