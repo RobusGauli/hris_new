@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, current_app
-
+from flask_cors import CORS
 
 
 
@@ -85,7 +85,7 @@ def create_app(config_name=None, main=True):
 
     #register the errohandler
     
-    
+    CORS(app)
     return app
 
 

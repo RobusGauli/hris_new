@@ -191,6 +191,12 @@ def create_update_permission(key):
             else:
                 role_id = decoded['role_id']
                 user_name = decoded['user_name']
+
+                if role_id not in current_app.config:
+                    roles = db_session.query(Role).all()
+                    roles = [role.to_dict() for role in roles]
+                    for role in roles:
+                        current_app.config[role['id']]= role
             
                 role = current_app.config[role_id][key]
                 if role == 'W' or role =='E':
@@ -219,6 +225,11 @@ def read_permission(key):
             else:
                 role_id = decoded['role_id']
                 user_name = decoded['user_name']
+                if role_id not in current_app.config:
+                    roles = db_session.query(Role).all()
+                    roles = [role.to_dict() for role in roles]
+                    for role in roles:
+                        current_app.config[role['id']]= role
 
                 role = current_app.config[role_id][key]
                 if  role != 'N':
