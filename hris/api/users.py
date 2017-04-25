@@ -83,7 +83,7 @@ def register_user():
                 return record_notfound_envelop('User doesn\'t exists')
             #if there is user check for the password
             if hashed_pass == user.password:
-                return record_json_envelop({'access_token' : user.access_token, 'role_id' : user.role_id})
+                return record_json_envelop({'access_token' : user.access_token, 'role_id' : user.role_id, 'permissions' : user.role.to_dict()})
             else:
                 return record_notfound_envelop('Password doesn\'t match')
         except NoResultFound as e:
@@ -93,7 +93,7 @@ def register_user():
 
     elif request.args['action'] == 'registeruserforemployee':
         if not request.args.get('e_id', None):
-            return 'please alos senr the e_id'
+            return 'please  send the e_id'
         e_id = int(request.args['e_id'])
 
         if not set(request.json.keys()) == {'user_name', 'password', 'role_id'}:
@@ -120,6 +120,9 @@ def register_user():
         except IntegrityError as ie:
         #hadle the error here
             return record_exists_envelop()
+        
+        except NoResultFound as e:
+            return record_notfound_envelop()
         
 
         else:
@@ -172,30 +175,53 @@ def get_users():
 
 
 @api.route('/users/<int:u_id>', methods=['PUT'])
-def update_user_password(u_id):
+def update_user(u_id):
     if not request.json:
         abort(400)
-    if 'password' not in request.json.keys():
+    if not request.args.get('action') == 'update_role':
+
+    
+        if 'password' not in request.json.keys():
+            return missing_keys_envelop()
+        try:
+            user = db_session.query(User).filter(User.id==u_id).one()
+            if user is None:
+                return record_notfound_envelop()
+            hashed_pass = hash_password(request.json['password'].encode())
+            old_hashed_pass = user.password
+            if old_hashed_pass == hashed_pass:
+                return jsonify({'message' : 'Please dont\'t use old password', 'status': 'fail'})
+            else:
+                user.password = hashed_pass
+                db_session.add(user)
+                db_session.commit()
+
+        except NoResultFound as e:
+            return record_notfound_envelop()
+        except Exception as e:
+            return fatal_error_envelop()
+        else:
+            return record_updated_envelop('Password updated Successfully.')
+
+    #update the role
+
+    if 'role_id' not in request.json:
         return missing_keys_envelop()
     try:
         user = db_session.query(User).filter(User.id==u_id).one()
         if user is None:
             return record_notfound_envelop()
-        hashed_pass = hash_password(request.json['password'].encode())
-        old_hashed_pass = user.password
-        if old_hashed_pass == hashed_pass:
-            return jsonify({'message' : 'Please dont\'t use old password', 'status': 'fail'})
-        else:
-            user.password = hashed_pass
-            db_session.add(user)
-            db_session.commit()
-
+        user.role_id = int(request.json['role_id'])
+        db_session.add(user)
+        db_session.commit()
     except NoResultFound as e:
         return record_notfound_envelop()
     except Exception as e:
+        raise
         return fatal_error_envelop()
+        
     else:
-        return record_updated_envelop('Password updated Successfully')
+        return record_updated_envelop('Role updated successfully.')   
         
-        
+
 

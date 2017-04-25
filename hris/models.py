@@ -58,7 +58,8 @@ class User(Base):
             'role_id' : self.role_id if self.role_id else '',
             'employee_data' : self.employee.to_dict() if self.employee else {},
 
-            'id' : self.id if self.id else ''
+            'id' : self.id if self.id else '',
+            'role_name' : self.role.role_type
         }
         return data
 
