@@ -75,7 +75,7 @@ def create_emp_cat_ranks():
 
 
 @api.route('/empcategoryranks', methods=['GET'])
-@read_permission('config_management_perm')
+@read_permission('read_management_perm')
 def get_emp_cat_ranks():
 
     try:
@@ -150,7 +150,7 @@ def create_emp_cat(rank_id):
 
 
 @api.route('/empcategories', methods=['GET'])
-@read_permission('config_management_perm')
+@read_permission('read_management_perm')
 def get_emp_categories():
 
     try:
@@ -230,7 +230,7 @@ def create_employee_type():
     
 
 @api.route('/employeetypes', methods=['GET'])
-@read_permission('config_management_perm')
+@read_permission('read_management_perm')
 def get_employee_types():
 
     try:
@@ -281,7 +281,7 @@ def update_emp_type(id):
 #get the employees by ranks
 
 @api.route('/empcategoryranks/<r_id>/employees', methods=['GET'])
-@read_permission('config_management_perm')
+@read_permission('read_management_perm')
 def get_employees_by_rank(r_id):
     try:
         rank = db_session.query(EmployeeCategoryRank).filter(EmployeeCategoryRank.id==r_id).one()
@@ -297,7 +297,7 @@ def get_employees_by_rank(r_id):
 
 #get the employees by categories
 @api.route('/empcategories/<int:c_id>/employees')
-@read_permission('config_management_perm')
+@read_permission('read_management_perm')
 def get_employees_by_category(c_id):
     try:
         cat = db_session.query(EmployeeCategory).filter(EmployeeCategory.id==c_id).one()

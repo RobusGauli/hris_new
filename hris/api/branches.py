@@ -265,7 +265,7 @@ def update_division(d_id):
 
 
 @api.route('/branches', methods=['GET'])
-@read_permission('division_management_perm')
+@read_permission('read_management_perm')
 def get_branches():
     try:
         branches = db_session.query(Branch).filter(Branch.is_branch==True).filter(Branch.del_flag==False).filter(Branch.acitivate==True).order_by(Branch.facility_name).all()
@@ -285,7 +285,7 @@ def get_branches():
 
 
 @api.route('/agencies', methods=['GET'])
-@read_permission('agency_management_perm')
+@read_permission('read_management_perm')
 def get_agencies():
     try:
         branches = db_session.query(Branch).filter(Branch.is_branch==False).filter(Branch.del_flag==False).filter(Branch.acitivate==True).order_by(Branch.facility_name).all()
@@ -304,7 +304,7 @@ def get_agencies():
 
 
 @api.route('/branches/<int:b_id>/employees')
-@read_permission('division_management_perm')
+@read_permission('read_management_perm')
 def get_employees_by_branch(b_id):
     try:
         employees = db_session.query(Employee).filter(Employee.employee_branch_id==b_id).filter(Employee.is_branch==True).all()
@@ -318,7 +318,7 @@ def get_employees_by_branch(b_id):
 
 
 @api.route('/agencies/<int:a_id>/employees')
-@read_permission('agency_management_perm')
+@read_permission('read_management_perm')
 def get_employees_by_agency(a_id):
     try:
         employees = db_session.query(Employee).filter(Employee.employee_branch_id==a_id).filter(Employee.is_branch==False).all()

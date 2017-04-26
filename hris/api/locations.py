@@ -168,7 +168,7 @@ def create_region():
 
 
 @api.route('/facilities', methods=['GET'])
-@read_permission('company_management_perm')
+@read_permission('read_management_perm')
 def get_facilities():
     
     try:
@@ -179,7 +179,7 @@ def get_facilities():
         return fatal_error_envelop()
 
 @api.route('/llg', methods=['GET'])
-@read_permission('company_management_perm')
+@read_permission('read_management_perm')
 def get_llg():
     
     try:
@@ -191,7 +191,7 @@ def get_llg():
 
 
 @api.route('/districts', methods=['GET'])
-@read_permission('company_management_perm')
+@read_permission('read_management_perm')
 def get_districts():
     
     try:
@@ -202,7 +202,7 @@ def get_districts():
         return fatal_error_envelop()
 
 @api.route('/provinces', methods=['GET'])
-@read_permission('company_management_perm')
+@read_permission('read_management_perm')
 def get_provinces():
     
     try:
@@ -214,7 +214,7 @@ def get_provinces():
 
 
 @api.route('/regions', methods=['GET'])
-@read_permission('company_management_perm')
+@read_permission('read_management_perm')
 def get_regions():
     
     try:

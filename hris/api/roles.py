@@ -71,7 +71,7 @@ def create_roles():
         return record_created_envelop(request.json)
 
 @api.route('/roles', methods=['GET'])
-@read_permission('user_management_perm')
+@read_permission('read_management_perm')
 def get_roles():
     try:
         roles = db_session.query(Role).all()
@@ -114,7 +114,7 @@ def update_role(r_id):
 
 
 @api.route('/roles/<int:r_id>', methods = ['GET'])
-@read_permission('user_management_perm')
+@read_permission('read_management_perm')
 def get_role_by_id(r_id):
     try:
         role = db_session.query(Role).filter(Role.id==r_id).one()

@@ -180,7 +180,7 @@ def get_employees():
 
 
 @api.route('/employees/<int:id>')
-@read_permission('agency_emp_perm')
+@read_permission('read_management_perm')
 def get_employee(id):
     try:
         emp  = db_session.query(Employee).filter(Employee.id==id).one()
@@ -244,7 +244,7 @@ def create_qualification_by_emp(id):
 
 
 @api.route('/employees/<int:id>/qualifications', methods=['GET'])
-@read_permission('agency_emp_perm')
+@read_permission('read_management_perm')
 def get_qualifications_by_emp(id):
     try:
         qls = db_session.query(Qualification).filter(Qualification.employee_id==id).all()
@@ -332,7 +332,7 @@ def create_certification_by_emp(id):
         return record_created_envelop(request.json)
 
 @api.route('/employees/<int:id>/certifications', methods=['GET'])
-@read_permission('agency_emp_perm')
+@read_permission('read_management_perm')
 def get_certifications_by_emp(id):
     try:
         certs = db_session.query(Certification).filter(Certification.employee_id==id).all()
@@ -354,7 +354,7 @@ def get_certifications_by_emp(id):
 
 
 @api.route('/employees/<int:emp_id>/certifications/<int:c_id>', methods=['PUT'])
-@create_update_permission('agency_emp_perm')
+@create_update_permission('read_management_perm')
 def update_certification_by_emp(emp_id, c_id):
     if not request.json:
         abort(400)
@@ -419,7 +419,7 @@ def create_training_by_emp(id):
         return record_created_envelop(request.json)
 
 @api.route('/employees/<int:id>/trainings', methods=['GET'])
-@read_permission('agency_emp_perm')
+@read_permission('read_management_perm')
 def get_trainings_by_emp(id):
     try:
         trs = db_session.query(Training).filter(Training.employee_id==id).all()
@@ -577,7 +577,7 @@ def update_empextra_by_emp(emp_id, ex_id):
 
 #all the employee of divisions
 @api.route('/employees/division', methods=['GET'])
-@read_permission('agency_emp_perm')
+@read_permission('read_management_perm')
 def get_employees_of_divisions():
     
     try:
@@ -593,7 +593,7 @@ def get_employees_of_divisions():
 
 
 @api.route('/employees/agency', methods=['GET'])
-@read_permission('agency_emp_perm')
+@read_permission('read_management_perm')
 def get_employees_of_agencies():
     try:
         employees = db_session.query(Employee).filter(Employee.is_branch==False).all()

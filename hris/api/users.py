@@ -168,7 +168,7 @@ def add_company_detail():
 
 
 @api.route('/users', methods = ['GET'])
-@read_permission('user_management_perm')
+@read_permission('read_management_perm')
 def get_users():
     try:
         users = db_session.query(User).filter(User.user_name != 'admin').all()
