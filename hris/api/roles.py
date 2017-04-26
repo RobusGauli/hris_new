@@ -51,8 +51,8 @@ def update_query(table_name,mapping, id):
 
 
 @api.route('/roles', methods = ['POST'])
-@handle_keys_for_post_request(Role, _exclude=('id', 'updated_at', 'updated_by', 'created_at', 'created_by', 'del_flag', 'permission_eight', 'permission_nine', 'permission_ten', 'role_type_display_name'))
 @create_update_permission('user_management_perm')
+@handle_keys_for_post_request(Role, _exclude=('id', 'updated_at', 'updated_by', 'created_at', 'created_by', 'del_flag', 'permission_eight', 'permission_nine', 'permission_ten', 'role_type_display_name'))
 def create_roles():
     '''This method will create a role and assign diffenet permissions'''
     try:
@@ -86,8 +86,8 @@ def get_roles():
 
 
 @api.route('/roles/<int:r_id>', methods=['PUT'])
-@handle_keys_for_update_request(Role, _exclude=('id', ))
 @create_update_permission('user_management_perm')
+@handle_keys_for_update_request(Role, _exclude=('id', ))
 def update_role(r_id):
     #check to see if they want to update the admin_role. refuse to change the admin_roel
     

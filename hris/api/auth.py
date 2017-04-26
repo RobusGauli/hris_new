@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from flask import current_app
+from flask import current_app, abort
 from functools import wraps
 from hris.utils import decode_access_token
 
