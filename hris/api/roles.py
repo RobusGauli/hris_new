@@ -105,6 +105,10 @@ def update_role(r_id):
         except Exception as e:
             return fatal_error_envelop()
         else:
+            roles = db_session.query(Role).all()
+            roles = [role.to_dict() for role in roles]
+            for role in roles:
+                current_app.config[role['id']]= role
             return record_updated_envelop(request.json)
 
 
