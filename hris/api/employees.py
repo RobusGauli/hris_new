@@ -318,9 +318,9 @@ def create_certification_by_emp(id):
     #clean up the values
     cert = {key : val.strip() if isinstance(val, str) else val for key, val in request.json.items()}
     #insert
-    print(id)
+    
     try:
-        print(id)
+        
         db_session.add(Certification(**cert, employee_id=id))
         db_session.commit()
     except IntegrityError as e:
