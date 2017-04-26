@@ -30,8 +30,15 @@ from hris.api.response_envelop import (
     length_require_envelop
 )
 
+from hris.api.auth import (
+    allow_permission, 
+    create_update_permission,
+    read_permission
+)
+
 
 @api.route('/users', methods=['POST'])
+@create_update_permission('user_management_perm')
 def register_user():
     '''This view register the user by generating ht access token with the given role'''
     if request.args and request.args['action'] == 'register':
@@ -83,7 +90,7 @@ def register_user():
                 return record_notfound_envelop('User doesn\'t exists')
             #if there is user check for the password
             if hashed_pass == user.password:
-                return record_json_envelop({'access_token' : user.access_token, 'role_id' : user.role_id, 'permissions' : user.role.to_dict()})
+                return record_json_envelop({'access_token' : user.access_token, 'activate' : user.activate, 'role_id' : user.role_id, 'permissions' : user.role.to_dict()})
             else:
                 return record_notfound_envelop('Password doesn\'t match')
         except NoResultFound as e:
@@ -162,6 +169,7 @@ def add_company_detail():
 
 
 @api.route('/users', methods = ['GET'])
+@read_permission('user_management_perm')
 def get_users():
     try:
         users = db_session.query(User).filter(User.user_name != 'admin').all()
@@ -175,6 +183,7 @@ def get_users():
 
 
 @api.route('/users/<int:u_id>', methods=['PUT'])
+@create_update_permission('user_management_perm')
 def update_user(u_id):
     if not request.json:
         abort(400)

@@ -110,6 +110,7 @@ def update_role(r_id):
 
 
 @api.route('/roles/<int:r_id>', methods = ['GET'])
+@read_permission('user_management_perm')
 def get_role_by_id(r_id):
     try:
         role = db_session.query(Role).filter(Role.id==r_id).one()

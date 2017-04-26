@@ -31,9 +31,16 @@ from hris.api.response_envelop import (
     missing_keys_envelop, 
     length_require_envelop
 )
+from hris.api.auth import (
+    allow_permission, 
+    create_update_permission,
+    read_permission
+)
+
 
 
 @api.route('/facilities', methods=['POST'])
+@create_update_permission('company_management_perm')
 def create_facility():
     if not set(request.json.keys()) == {'name'}:
         return jsonify({'message' : 'missing keys'})
@@ -59,6 +66,7 @@ def create_facility():
 
 
 @api.route('/districts', methods=['POST'])
+@create_update_permission('company_management_perm')
 def create_district():
     if not set(request.json.keys()) == {'name'}:
         return jsonify({'message' : 'missing keys'})
@@ -83,6 +91,7 @@ def create_district():
 
 
 @api.route('/llg', methods=['POST'])
+@create_update_permission('company_management_perm')
 def create_llg():
     if not set(request.json.keys()) == {'name'}:
         return jsonify({'message' : 'missing keys'})
@@ -107,6 +116,7 @@ def create_llg():
 
 
 @api.route('/provinces', methods=['POST'])
+@create_update_permission('company_management_perm')
 def create_province():
     if not set(request.json.keys()) == {'name'}:
         return jsonify({'message' : 'missing keys'})
@@ -130,6 +140,7 @@ def create_province():
         return record_created_envelop(request.json)
 
 @api.route('/regions', methods=['POST'])
+@create_update_permission('company_management_perm')
 def create_region():
     if not set(request.json.keys()) == {'name'}:
         return jsonify({'message' : 'missing keys'})
@@ -157,6 +168,7 @@ def create_region():
 
 
 @api.route('/facilities', methods=['GET'])
+@read_permission('company_management_perm')
 def get_facilities():
     
     try:
@@ -167,6 +179,7 @@ def get_facilities():
         return fatal_error_envelop()
 
 @api.route('/llg', methods=['GET'])
+@read_permission('company_management_perm')
 def get_llg():
     
     try:
@@ -178,6 +191,7 @@ def get_llg():
 
 
 @api.route('/districts', methods=['GET'])
+@read_permission('company_management_perm')
 def get_districts():
     
     try:
@@ -188,6 +202,7 @@ def get_districts():
         return fatal_error_envelop()
 
 @api.route('/provinces', methods=['GET'])
+@read_permission('company_management_perm')
 def get_provinces():
     
     try:
@@ -199,6 +214,7 @@ def get_provinces():
 
 
 @api.route('/regions', methods=['GET'])
+@read_permission('company_management_perm')
 def get_regions():
     
     try:
@@ -211,6 +227,7 @@ def get_regions():
     
 
 @api.route('/facilities/<int:id>', methods=['PUT'])
+@create_update_permission('company_management_perm')
 def update_facility(id):
     if not request.json:
         abort(400)
@@ -240,6 +257,7 @@ def update_facility(id):
 
 
 @api.route('/llg/<int:id>', methods=['PUT'])
+@create_update_permission('company_management_perm')
 def update_llg(id):
     if not request.json:
         abort(400)
@@ -269,6 +287,7 @@ def update_llg(id):
 
 
 @api.route('/districts/<int:id>', methods=['PUT'])
+@create_update_permission('company_management_perm')
 def update_district(id):
     if not request.json:
         abort(400)
@@ -298,6 +317,7 @@ def update_district(id):
     
 
 @api.route('/provinces/<int:id>', methods=['PUT'])
+@create_update_permission('company_management_perm')
 def update_province(id):
     if not request.json:
         abort(400)
@@ -327,6 +347,7 @@ def update_province(id):
 
     
 @api.route('/regions/<int:id>', methods=['PUT'])
+@create_update_permission('company_management_perm')
 def update_region(id):
     if not request.json:
         abort(400)
