@@ -38,7 +38,6 @@ from hris.api.auth import (
 
 
 @api.route('/users', methods=['POST'])
-@create_update_permission('user_management_perm')
 def register_user():
     '''This view register the user by generating ht access token with the given role'''
     if request.args and request.args['action'] == 'register':
