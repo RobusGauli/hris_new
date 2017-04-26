@@ -168,7 +168,8 @@ def get_employees():
                   'contract_end_date' : emp.contract_end_date if emp.contract_end_date else '',
                   'id' : emp.id if emp.id else '',
                   'user_id' : emp.user_id if emp.user_id else '',
-                  'employee_branch_id' : emp.employee_branch_id if emp.employee_branch_id else ''
+                  'employee_branch_id' : emp.employee_branch_id if emp.employee_branch_id else '',
+                  'role_id' : emp.user.role_id if emp.user else ''
                                     
 
         } for emp in employees)
