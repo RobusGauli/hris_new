@@ -193,19 +193,13 @@ def create_update_permission(key):
                 user_name = decoded['user_name']
                 try:
                     user = db_session.query(User).filter(User.user_name == user_name).one()
+                    role = user.role
+                    role = role.todict()[key]
                 except NoResultFound as e:
                     return record_notfound_envelop()
                 except Exception as e:
                     return fatal_error_envelop()
                 else:
-                    role_id = user.role_id
-                    if role_id not in current_app.config:
-                        roles = db_session.query(Role).all()
-                        roles = [role.to_dict() for role in roles]
-                        for role in roles:
-                            current_app.config[role['id']]= role
-                    print(current_app.config[role_id])
-                    role = current_app.config[role_id][key]
                     if role == 'W' or role =='E':
                         return func(*args, **kwargs)
                     else:
