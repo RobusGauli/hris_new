@@ -194,7 +194,7 @@ def create_update_permission(key):
                 try:
                     user = db_session.query(User).filter(User.user_name == user_name).one()
                     role = user.role
-                    role = role.todict()[key]
+                    role = role.to_dict()[key]
                 except NoResultFound as e:
                     return record_notfound_envelop()
                 except Exception as e:
